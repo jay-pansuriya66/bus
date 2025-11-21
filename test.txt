@@ -1,0 +1,163 @@
+Step 2: Install Entity Framework Core Packages
+Open Package Manager Console (Tools → NuGet Package Manager → PMC) and run:
+
+Install-Package Microsoft.EntityFrameworkCore
+Install-Package Microsoft.EntityFrameworkCore.SqlServer
+Install-Package Microsoft.EntityFrameworkCore.Tools
+
+
+Step 3: Create the Model (Code-First)
+Create a folder named Models → Add a class Student.cs:
+
+using System.ComponentModel.DataAnnotations;
+
+namespace MvcCrudDemo.Models
+{
+    public class Student
+    {
+        [Key]
+        public int Id { get; set; }
+
+        [Required]
+        [StringLength(50)]
+        public string Name { get; set; }
+
+        [Required]
+        public int Age { get; set; }
+
+        [EmailAddress]
+        public string Email { get; set; }
+    }
+}
+
+
+Step 4: Create the Database Context
+In the same Models folder, create a new class AppDbContext.cs:
+
+using Microsoft.EntityFrameworkCore;
+
+namespace MvcCrudDemo.Models
+{
+    public class AppDbContext : DbContext
+    {
+        public AppDbContext(DbContextOptions<AppDbContext> options)
+            : base(options)
+        {
+        }
+
+        public DbSet<Student> Students { get; set; }
+    }
+}
+
+
+Step 5: Configure the Connection String
+Open appsettings.json and add:
+
+"ConnectionStrings": {
+  "DefaultConnection": "Server=(localdb)\\MSSQLLocalDB;Database=MvcCrudDemoDB;Trusted_Connection=True;MultipleActiveResultSets=true"
+}
+
+Then, open Program.cs (or Startup.cs in older versions) and add:
+
+// Register DbContext
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+var app = builder.Build();
+
+
+Step 6: Apply Migrations & Create Database
+In Package Manager Console, run:
+
+Add-Migration InitialCreate
+Update-Database
+
+
+Step 7: Scaffold the CRUD Controller & Views
+
+Right-click on the Controllers folder →
+Add → New Scaffolded Item… →
+Select MVC Controller with views, using Entity Framework → Click Add
+
+Then configure:
+
+Model class: Student (MvcCrudDemo.Models)
+
+Data context class: AppDbContext
+
+Controller name: StudentsController (default)
+
+Click Add
+
+📌 This will auto-generate:
+
+StudentsController.cs with CRUD actions (Index, Details, Create, Edit, Delete)
+
+Razor Views inside Views/Students/ for each action
+
+
+----------python---------------
+
+----------Numpy----------
+
+Concept	Function
+Create Arrays	np.array, np.zeros, np.ones, np.arange, np.linspace
+Properties	.shape, .dtype, .size, .ndim
+Math Ops	+ - * /, np.sqrt, np.sin, etc.
+Index/Slice	[row, col], :
+Aggregation	sum, mean, std, axis
+Reshape	reshape, ravel, T
+Stack	vstack, hstack, concatenate
+Random	np.random methods
+Linear Algebra	np.dot, np.linalg
+
+--------pandas----------
+
+Concept	Function
+Create	pd.Series, pd.DataFrame, read_csv, read_excel
+Inspect	head, info, describe, shape
+Select	loc, iloc, [], conditions
+Modify	insert, rename, drop, replace, map
+Missing Data	isnull, fillna, dropna
+Aggregate	mean, sum, value_counts, groupby
+Sort	sort_values, sort_index
+Merge	concat, merge, join
+Apply	apply, applymap, lambda
+Export	to_csv, to_excel, to_json
+
+data = {'Name': ['John', 'Anna', 'Peter', 'Linda'],
+        'Age': [23, 21, np.nan, 30],
+        'Gender': ['M', 'F', 'M', 'F']}
+
+df = pd.DataFrame(data)
+df['Age'].fillna(df['Age'].mean(), inplace=True)
+df.groupby('Gender')['Age'].mean()
+
+-------matplotlib--------
+
+Task	Function / Method
+Line Plot	plt.plot(x, y)
+Bar Plot	plt.bar(x, y) / plt.barh()
+Scatter Plot	plt.scatter(x, y)
+Pie Chart	plt.pie(data, labels=...)
+Histogram	plt.hist(data, bins=...)
+Title	plt.title("...")
+Labels	plt.xlabel(), plt.ylabel()
+Legend	plt.legend()
+Save Figure	plt.savefig("file.png")
+Subplots	plt.subplots(rows, cols)
+Style	plt.style.use('ggplot')
+Show Plot	plt.show()
+
+import numpy as np
+import matplotlib.pyplot as plt
+
+x = np.linspace(0, 2*np.pi, 100)
+plt.plot(x, np.sin(x), label='sin(x)')
+plt.plot(x, np.cos(x), label='cos(x)', linestyle='--')
+plt.legend()
+plt.title('Sine and Cosine Waves')
+plt.xlabel('x values')
+plt.ylabel('y values')
+plt.grid(True)
+plt.show()
