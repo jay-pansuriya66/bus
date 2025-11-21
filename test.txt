@@ -161,3 +161,165 @@ plt.xlabel('x values')
 plt.ylabel('y values')
 plt.grid(True)
 plt.show()
+
+
+-----Linear
+
+import matplotlib.pyplot as plt
+import numpy as np
+
+# Sample data (e.g., stock price over 10 days)
+days = np.arange(1, 11)
+price = [10, 12, 11, 14, 15, 13, 16, 18, 17, 20]
+
+# Create the line plot
+plt.figure(figsize=(8, 5))
+plt.plot(days, price, marker='s', linestyle='-', color='red') # marker for points, linestyle for line
+plt.title('Line Plot: Price Trend Over 10 Days')
+plt.xlabel('Day')
+plt.ylabel('Price ($)')
+plt.grid(True)
+plt.show()
+
+-----bar
+
+import matplotlib.pyplot as plt
+
+# Sample data
+categories = ['Apples', 'Bananas', 'Oranges', 'Grapes']
+sales = [150, 210, 180, 90]
+
+# Create the bar plot
+plt.figure(figsize=(8, 5))
+plt.bar(categories, sales, color=['green', 'yellow', 'orange', 'purple'])
+plt.title('Bar Plot: Fruit Sales by Category')
+plt.xlabel('Fruit Category')
+plt.ylabel('Sales Volume')
+plt.show()
+
+-----Histogram
+
+import matplotlib.pyplot as plt
+import numpy as np
+
+# Sample data (e.g., ages of a population)
+np.random.seed(42)
+data = np.random.normal(loc=50, scale=10, size=1000) # Mean=50, Std Dev=10
+
+# Create the histogram
+plt.figure(figsize=(8, 5))
+plt.hist(data, bins=20, color='skyblue', edgecolor='black', alpha=0.7) # bins define the number of intervals
+plt.title('Histogram: Distribution of Ages')
+plt.xlabel('Age Group')
+plt.ylabel('Frequency')
+plt.show()
+
+-----box
+
+import matplotlib.pyplot as plt
+import numpy as np
+
+# Sample data for three different groups
+np.random.seed(42)
+group1 = np.random.normal(60, 10, 100)
+group2 = np.random.normal(70, 5, 100)
+group3 = np.random.normal(50, 15, 100)
+data = [group1, group2, group3]
+
+# Create the box plot
+plt.figure(figsize=(8, 5))
+plt.boxplot(data, labels=['Group A', 'Group B', 'Group C'], patch_artist=True) # labels for groups
+plt.title('Box Plot: Score Distribution by Group')
+plt.ylabel('Scores')
+plt.grid(axis='y')
+plt.show()
+
+
+-----Pie
+
+import matplotlib.pyplot as plt
+
+# Sample data
+labels = ['North', 'East', 'South', 'West']
+sizes = [35, 25, 20, 20] # Percentages adding up to 100
+
+# Create the pie plot
+plt.figure(figsize=(8, 8))
+plt.pie(sizes, labels=labels, autopct='%1.1f%%', startangle=90, shadow=True) # autopct formats the percentage text
+plt.title('Pie Plot: Regional Sales Distribution')
+plt.axis('equal') # Ensures the pie is circular
+plt.show()
+
+
+------Q10
+
+##. Graphically show the contribution of RAM types and explode the RAM havinglowest contribution.
+
+import pandas as pd
+import matplotlib.pyplot as plt
+import numpy as np
+
+# 1. Create dummy data
+data = {
+    'RAM_Type': ['DDR3', 'DDR4', 'DDR5'],
+    'Contribution': [150, 450, 300]
+}
+df = pd.DataFrame(data)
+
+# 2. Save the dummy data to a CSV file
+csv_file_name = 'ram_contribution_data.csv'
+df.to_csv(csv_file_name, index=False)
+
+# 3. Read the CSV file (for reference, though plotting uses the DataFrame directly)
+# df = pd.read_csv(csv_file_name)
+
+# 4. Determine the RAM type with the lowest contribution
+lowest_contribution = df['Contribution'].min()
+lowest_ram_type = df.loc[df['Contribution'].idxmin(), 'RAM_Type']
+
+# Sort the data for better bar chart visualization
+df_sorted = df.sort_values(by='Contribution', ascending=False)
+
+# --- Plot 1: Bar Chart (Highlighting the lowest contribution) ---
+
+# Create color map: highlight the lowest contribution in red
+colors = ['skyblue'] * len(df_sorted)
+colors[df_sorted['RAM_Type'].tolist().index(lowest_ram_type)] = 'red'
+
+plt.figure(figsize=(10, 6))
+plt.bar(df_sorted['RAM_Type'], df_sorted['Contribution'], color=colors)
+
+plt.title(f'RAM Type Contribution (Lowest highlighted: {lowest_ram_type})', fontsize=14)
+plt.xlabel('RAM Type', fontsize=12)
+plt.ylabel('Contribution (Units/Sales)', fontsize=12)
+plt.grid(axis='y', linestyle='--', alpha=0.7)
+plt.xticks(rotation=0)
+
+# Add annotations to bars
+for i, contribution in enumerate(df_sorted['Contribution']):
+    plt.text(i, contribution + 10, str(contribution), ha='center', va='bottom', fontweight='bold')
+
+plt.tight_layout()
+plt.savefig('ram_contribution_bar_chart.png')
+plt.close()
+
+# --- Plot 2: Pie Chart (Satisfying the explicit 'explode' requirement) ---
+
+# Create the explode list: explode the slice corresponding to the lowest contribution
+explode = [0] * len(df)
+explode_index = df['RAM_Type'].tolist().index(lowest_ram_type)
+explode[explode_index] = 0.15 # Explode the lowest slice by 15%
+
+plt.figure(figsize=(8, 8))
+plt.pie(df['Contribution'],
+        labels=df['RAM_Type'],
+        autopct='%1.1f%%',
+        startangle=90,
+        explode=explode,
+        shadow=True,
+        colors=['#66b3ff','#99ff99','#ffcc99']) # Custom colors
+
+plt.title(f'RAM Type Contribution (Lowest contribution slice exploded: {lowest_ram_type})', fontsize=14)
+plt.axis('equal') # Equal aspect ratio ensures that pie is drawn as a circle.
+plt.savefig('ram_contribution_pie_chart_exploded.png')
+plt.close()
