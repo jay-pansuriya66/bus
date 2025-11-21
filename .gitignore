@@ -1,0 +1,38 @@
+# # Ignore everything
+# *
+
+# Allow directories for MVC structure
+!Models/
+!Views/
+!Controllers/
+
+# Allow the Program.cs file at root
+!Program.cs
+
+# But still ignore build junk inside allowed folders
+# (since * inside allowed folders also became allowed)
+# Models/**/bin/
+# Models/**/obj/
+# Views/**/bin/
+# Views/**/obj/
+# Controllers/**/bin/
+# Controllers/**/obj/
+wwwroot/
+Properties/
+Migrations/
+bus.csproj.user
+bus.csproj
+.dist/
+appsettings.Development.json
+# Ignore typical .NET clutter globally
+bin/
+obj/
+*.user
+*.suo
+*.cache
+*.log
+*.ldb
+*.pdb
+*.db
+*.config
+*.local
