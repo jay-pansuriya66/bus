@@ -95,6 +95,15 @@ StudentsController.cs with CRUD actions (Index, Details, Create, Edit, Delete)
 
 Razor Views inside Views/Students/ for each action
 
+ViewData["Tid"] = new SelectList(
+    _context.Teachers
+        .Select(t => new {
+            t.Tid,
+            FullTeacher = t.Tname
+        }),
+    "Tid", "FullTeacher"
+);
+
 
 ----------python---------------
 
